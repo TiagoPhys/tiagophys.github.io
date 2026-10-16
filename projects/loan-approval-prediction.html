@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Loan Approval Prediction | Tiago Azevedo</title>
+  <meta name="description" content="Leakage checks, model comparison and an interpretable model that explains what drives loan approval.">
+
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <link href="../assets/css/main.css" rel="stylesheet">
+  <link href="../assets/css/custom.css" rel="stylesheet">
+</head>
+
+<body class="portfolio-details-page">
+
+  <header id="header" class="header dark-background d-flex flex-column">
+    <i class="header-toggle d-xl-none bi bi-list"></i>
+
+    <div class="profile-img">
+      <img src="../assets/img/profile.jpg" alt="Tiago Azevedo" class="img-fluid rounded-circle">
+    </div>
+
+    <a href="../index.html" class="logo d-flex align-items-center justify-content-center">
+      <h1 class="sitename">Tiago Azevedo</h1>
+    </a>
+
+    <div class="social-links text-center">
+      <a href="https://github.com/TiagoPhys" class="github" title="GitHub" target="_blank" rel="noopener"><i class="bi bi-github"></i></a>
+      <a href="https://www.linkedin.com/in/tnazevedo/" class="linkedin" title="LinkedIn" target="_blank" rel="noopener"><i class="bi bi-linkedin"></i></a>
+      <a href="mailto:tiago.phys@gmail.com" title="Email"><i class="bi bi-envelope"></i></a>
+    </div>
+
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href="../index.html#hero"><i class="bi bi-house navicon"></i> Home</a></li>
+        <li><a href="../index.html#about"><i class="bi bi-person navicon"></i> About</a></li>
+        <li><a href="../index.html#resume"><i class="bi bi-file-earmark-text navicon"></i> Resume</a></li>
+        <li><a href="../index.html#portfolio" class="active"><i class="bi bi-images navicon"></i> Portfolio</a></li>
+        <li><a href="../index.html#research"><i class="bi bi-journal-text navicon"></i> Research</a></li>
+        <li><a href="../index.html#contact"><i class="bi bi-envelope navicon"></i> Contact</a></li>
+      </ul>
+    </nav>
+
+  </header>
+
+  <main class="main">
+
+    <div class="page-title dark-background">
+      <div class="container d-lg-flex justify-content-between align-items-center">
+        <h1 class="mb-2 mb-lg-0">Loan Approval Prediction</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../index.html#portfolio">Portfolio</a></li>
+            <li class="current">Loan Approval Prediction</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <section id="portfolio-details" class="portfolio-details section">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row gy-4">
+
+          <div class="col-lg-8 order-2 order-lg-1">
+            <article class="case-study">
+<p class="lead-text">A lender wants to predict which loan applications will be approved, using only information available when the application is made, and to understand what drives the decision.</p>
+<h2>The problem</h2>
+<p>The data is the synthetic <a href="https://www.kaggle.com/datasets/lorenzozoppelletto/financial-risk-for-loan-approval">Financial Risk for Loan Approval</a> dataset from Kaggle. 23.9% of the applications were approved. A good model here has to be accurate, but also usable: it must rely only on what the lender knows at application time, and each decision must be explainable.</p>
+<h2>Approach</h2>
+<ol>
+<li><strong>Data checks.</strong> No missing values or duplicates. Two inconsistencies from the data generator were found and documented: monthly income that does not match annual income in 195 rows, and net worth that stays positive when debts exceed assets.</li>
+<li><strong>Exploratory analysis.</strong> Compared approved and rejected applications on income, debt, credit score, loan size and categorical variables.</li>
+<li><strong>Leakage checks before modelling.</strong><ul>
+<li><code>RiskScore</code> alone reproduces 96.5% of decisions with one cut-off, so it was removed.</li>
+<li><code>InterestRate</code> is set by the lender as part of the decision, so it was removed.</li>
+<li><code>MonthlyLoanPayment</code> and <code>TotalDebtToIncomeRatio</code> are calculated exactly from <code>InterestRate</code>, so the final model leaves them out too.</li>
+<li><code>ApplicationDate</code> is just a row counter (one application per day from 2018 to 2072), so it was dropped.</li>
+</ul>
+</li>
+<li><strong>Modelling.</strong> Logistic Regression, XGBoost and LightGBM in scikit-learn pipelines, compared with 5-fold cross-validation and then on a 30% test set.</li>
+<li><strong>Interpretation.</strong> Permutation importance, logistic regression coefficients, and a table of approval thresholds.</li>
+</ol>
+<figure><a href="../assets/img/projects/loan-approval-prediction/risk_score.png" class="glightbox" data-gallery="loan-approval-prediction"><img src="../assets/img/projects/loan-approval-prediction/risk_score.png" alt="A single cut-off on RiskScore separates almost all decisions, so the column was removed as leakage." loading="lazy"></a><figcaption>A single cut-off on RiskScore separates almost all decisions, so the column was removed as leakage.</figcaption></figure>
+
+<h2>Results</h2>
+<div class="metrics">
+<div class="metric"><span class="value">0.97</span><span class="label">test ROC AUC, all three models</span></div>
+<div class="metric"><span class="value">&lt; 0.005</span><span class="label">ROC AUC lost by removing leaky columns</span></div>
+<div class="metric"><span class="value">44% vs 14%</span><span class="label">approval rate, doctorate vs high school</span></div>
+</div>
+
+<figure><a href="../assets/img/projects/loan-approval-prediction/distributions_by_decision.png" class="glightbox" data-gallery="loan-approval-prediction"><img src="../assets/img/projects/loan-approval-prediction/distributions_by_decision.png" alt="Income, debt, credit score and loan amount by decision." loading="lazy"></a><figcaption>Income, debt, credit score and loan amount by decision.</figcaption></figure>
+
+<ul>
+<li>All three models reach a test ROC AUC of about 0.97. Logistic Regression performs as well as the boosted trees, so it is the final model because each decision can be explained.</li>
+<li>Removing the columns derived from the interest rate costs less than 0.005 in ROC AUC.</li>
+<li>Income is by far the most important factor, followed by loan amount. Net worth, length of credit history, education level and past bankruptcies or defaults come next.</li>
+</ul>
+<figure><a href="../assets/img/projects/loan-approval-prediction/roc_pr_curves.png" class="glightbox" data-gallery="loan-approval-prediction"><img src="../assets/img/projects/loan-approval-prediction/roc_pr_curves.png" alt="ROC and precision-recall curves on the test set." loading="lazy"></a><figcaption>ROC and precision-recall curves on the test set.</figcaption></figure>
+
+<figure><a href="../assets/img/projects/loan-approval-prediction/permutation_importance.png" class="glightbox" data-gallery="loan-approval-prediction"><img src="../assets/img/projects/loan-approval-prediction/permutation_importance.png" alt="Permutation importance of the final model." loading="lazy"></a><figcaption>Permutation importance of the final model.</figcaption></figure>
+
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Threshold</th>
+<th>Approved by model</th>
+<th>Wrongly approved</th>
+<th>Wrongly rejected</th>
+<th>Precision</th>
+<th>Recall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.5</td>
+<td>1,716</td>
+<td>427</td>
+<td>145</td>
+<td>0.75</td>
+<td>0.90</td>
+</tr>
+<tr>
+<td>0.7</td>
+<td>1,428</td>
+<td>233</td>
+<td>239</td>
+<td>0.84</td>
+<td>0.83</td>
+</tr>
+<tr>
+<td>0.8</td>
+<td>1,272</td>
+<td>153</td>
+<td>315</td>
+<td>0.88</td>
+<td>0.78</td>
+</tr>
+</tbody>
+</table></div>
+<p>The threshold should be chosen from the cost of a bad loan compared with the profit of a good one.</p>
+<h2>Limitations</h2>
+<p>The data is synthetic and approval follows a scoring rule, which explains the high accuracy. Approval is also not the same as repayment: a real credit model would predict default.</p>
+            </article>
+            <a class="back-link" href="../index.html#portfolio"><i class="bi bi-arrow-left"></i> Back to all projects</a>
+          </div>
+
+          <div class="col-lg-4 order-1 order-lg-2">
+            <div class="portfolio-info" data-aos="fade-up" data-aos-delay="200">
+              <h3>Project information</h3>
+              <ul>
+                <li><strong>Category</strong><span>Machine learning, Interpretability</span></li>
+                <li><strong>Data</strong><span>20,000 applications, 36 columns</span></li>
+                <li><strong>Stack</strong><span>Python, scikit-learn, XGBoost, LightGBM</span></li>
+                <li><strong>Methods</strong><span>Leakage checks, cross-validation, permutation importance</span></li>
+                <li><strong>Code</strong><span><a href="https://github.com/TiagoPhys/Data-Analysis-Portfolio/blob/main/06-loan-approval-prediction/loan_approval_prediction.ipynb">Notebook on GitHub</a></span></li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="footer" class="footer position-relative light-background">
+    <div class="container">
+      <div class="copyright text-center">
+        <p>© <span>Copyright</span> <strong class="px-1 sitename">Tiago Azevedo</strong> <span>All Rights Reserved</span></p>
+      </div>
+      <div class="credits">
+        <!-- The free template licence requires keeping this credit link -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+  </footer>
+
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <div id="preloader"></div>
+
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/vendor/aos/aos.js"></script>
+  <script src="../assets/vendor/typed.js/typed.umd.js"></script>
+  <script src="../assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="../assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../assets/js/main.js"></script>
+
+</body>
+
+</html>

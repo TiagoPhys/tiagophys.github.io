@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Fraud Detection in Mobile Money | Tiago Azevedo</title>
+  <meta name="description" content="Classification on 6.3 million highly imbalanced transactions, with leakage control and a comparison of four models.">
+
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <link href="../assets/css/main.css" rel="stylesheet">
+  <link href="../assets/css/custom.css" rel="stylesheet">
+</head>
+
+<body class="portfolio-details-page">
+
+  <header id="header" class="header dark-background d-flex flex-column">
+    <i class="header-toggle d-xl-none bi bi-list"></i>
+
+    <div class="profile-img">
+      <img src="../assets/img/profile.jpg" alt="Tiago Azevedo" class="img-fluid rounded-circle">
+    </div>
+
+    <a href="../index.html" class="logo d-flex align-items-center justify-content-center">
+      <h1 class="sitename">Tiago Azevedo</h1>
+    </a>
+
+    <div class="social-links text-center">
+      <a href="https://github.com/TiagoPhys" class="github" title="GitHub" target="_blank" rel="noopener"><i class="bi bi-github"></i></a>
+      <a href="https://www.linkedin.com/in/tnazevedo/" class="linkedin" title="LinkedIn" target="_blank" rel="noopener"><i class="bi bi-linkedin"></i></a>
+      <a href="mailto:tiago.phys@gmail.com" title="Email"><i class="bi bi-envelope"></i></a>
+    </div>
+
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href="../index.html#hero"><i class="bi bi-house navicon"></i> Home</a></li>
+        <li><a href="../index.html#about"><i class="bi bi-person navicon"></i> About</a></li>
+        <li><a href="../index.html#resume"><i class="bi bi-file-earmark-text navicon"></i> Resume</a></li>
+        <li><a href="../index.html#portfolio" class="active"><i class="bi bi-images navicon"></i> Portfolio</a></li>
+        <li><a href="../index.html#research"><i class="bi bi-journal-text navicon"></i> Research</a></li>
+        <li><a href="../index.html#contact"><i class="bi bi-envelope navicon"></i> Contact</a></li>
+      </ul>
+    </nav>
+
+  </header>
+
+  <main class="main">
+
+    <div class="page-title dark-background">
+      <div class="container d-lg-flex justify-content-between align-items-center">
+        <h1 class="mb-2 mb-lg-0">Fraud Detection in Mobile Money</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../index.html#portfolio">Portfolio</a></li>
+            <li class="current">Fraud Detection in Mobile Money</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <section id="portfolio-details" class="portfolio-details section">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row gy-4">
+
+          <div class="col-lg-8 order-2 order-lg-1">
+            <article class="case-study">
+<p class="lead-text">Fraud is very rare in mobile money: 0.13% of 6.3 million transactions. The goal was to detect it without letting the model learn shortcuts that would not exist in production.</p>
+<h2>The problem</h2>
+<p>Detect fraudulent transactions in a mobile money system where fraud is very rare. The data comes from <a href="https://www.kaggle.com/datasets/ealaxi/paysim1">PaySim</a>, a synthetic dataset built from real mobile money logs.</p>
+<h2>Approach</h2>
+<ol>
+<li><strong>Exploratory analysis.</strong> Amount distributions on a log scale, and fraud by transaction type and by origin and destination.</li>
+<li><strong>Feature engineering.</strong> Created a transaction direction feature (customer to customer, customer to merchant) from the account IDs, then dropped the IDs so the models could not memorise accounts.</li>
+<li><strong>Leakage control.</strong> Removed the balance columns. Fraudulent transactions are cancelled in the simulation, so the balances reveal the label.</li>
+<li><strong>Modelling.</strong> Stratified 70/30 split, comparing Logistic Regression, Random Forest, LightGBM and XGBoost.</li>
+</ol>
+<h2>Results</h2>
+<div class="metrics">
+<div class="metric"><span class="value">0.956</span><span class="label">ROC AUC, XGBoost</span></div>
+<div class="metric"><span class="value">17%</span><span class="label">frauds caught at the default 0.5 threshold</span></div>
+<div class="metric"><span class="value">4×</span><span class="label">fraud risk of a transfer vs a cash out</span></div>
+</div>
+
+<p>All fraud happens in TRANSFER and CASH_OUT transactions between two customer accounts. A transfer is about 4 times more likely to be fraud than a cash out.</p>
+<figure><a href="../assets/img/projects/fraud-detection/transactions_by_type.png" class="glightbox" data-gallery="fraud-detection"><img src="../assets/img/projects/fraud-detection/transactions_by_type.png" alt="Transactions and fraud rate by type." loading="lazy"></a><figcaption>Transactions and fraud rate by type.</figcaption></figure>
+
+<p>XGBoost ranks transactions best. At the default 0.5 threshold, however, it catches only 17% of frauds, with 92% precision. With this level of imbalance, the threshold should be set from the cost of a missed fraud versus the cost of a false alarm.</p>
+<figure><a href="../assets/img/projects/fraud-detection/roc_curves.png" class="glightbox" data-gallery="fraud-detection"><img src="../assets/img/projects/fraud-detection/roc_curves.png" alt="ROC curves for the four models." loading="lazy"></a><figcaption>ROC curves for the four models.</figcaption></figure>
+
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Precision (fraud)</th>
+<th>Recall (fraud)</th>
+<th>ROC AUC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>XGBoost</td>
+<td>0.92</td>
+<td>0.17</td>
+<td>0.956</td>
+</tr>
+<tr>
+<td>Random Forest</td>
+<td>0.72</td>
+<td>0.35</td>
+<td>0.794</td>
+</tr>
+<tr>
+<td>LightGBM</td>
+<td>0.59</td>
+<td>0.20</td>
+<td>0.886</td>
+</tr>
+<tr>
+<td>Logistic Regression</td>
+<td>0.18</td>
+<td>0.00</td>
+<td>0.901</td>
+</tr>
+</tbody>
+</table></div>
+<h2>Next steps</h2>
+<p>Report PR-AUC and precision-recall curves, tune the threshold to a target recall, try class weighting, validate on later time periods, and add behavioural features such as hour of day and number of transactions per account.</p>
+            </article>
+            <a class="back-link" href="../index.html#portfolio"><i class="bi bi-arrow-left"></i> Back to all projects</a>
+          </div>
+
+          <div class="col-lg-4 order-1 order-lg-2">
+            <div class="portfolio-info" data-aos="fade-up" data-aos-delay="200">
+              <h3>Project information</h3>
+              <ul>
+                <li><strong>Category</strong><span>Machine learning, Classification</span></li>
+                <li><strong>Data</strong><span>PaySim, 6.3M transactions</span></li>
+                <li><strong>Stack</strong><span>Python, pandas, scikit-learn, XGBoost, LightGBM</span></li>
+                <li><strong>Methods</strong><span>Feature engineering, leakage control, model comparison</span></li>
+                <li><strong>Code</strong><span><a href="https://github.com/TiagoPhys/Data-Analysis-Portfolio/blob/main/01-fraud-detection-paysim/fraud_detection.ipynb">Notebook on GitHub</a></span></li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="footer" class="footer position-relative light-background">
+    <div class="container">
+      <div class="copyright text-center">
+        <p>© <span>Copyright</span> <strong class="px-1 sitename">Tiago Azevedo</strong> <span>All Rights Reserved</span></p>
+      </div>
+      <div class="credits">
+        <!-- The free template licence requires keeping this credit link -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+  </footer>
+
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <div id="preloader"></div>
+
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/vendor/aos/aos.js"></script>
+  <script src="../assets/vendor/typed.js/typed.umd.js"></script>
+  <script src="../assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="../assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../assets/js/main.js"></script>
+
+</body>
+
+</html>

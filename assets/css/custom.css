@@ -1,0 +1,264 @@
+/* My additions on top of the iPortfolio template (main.css is left untouched).
+   To change the accent colour, edit --accent-color below. */
+
+:root {
+  --accent-color: #149ddd;
+}
+
+/* Skills as grouped tags instead of percentage bars */
+.skill-group {
+  background: var(--surface-color);
+  border-radius: 8px;
+  padding: 24px;
+  height: 100%;
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.06);
+}
+.skill-group h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.skill-group h3 i {
+  color: var(--accent-color);
+  margin-right: 6px;
+}
+.skill-tags {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.skill-tags li {
+  font-size: 14px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--accent-color), transparent 90%);
+  color: var(--heading-color);
+}
+
+/* Research */
+.paper {
+  border-left: 3px solid var(--accent-color);
+  padding: 4px 0 4px 18px;
+  height: 100%;
+}
+.paper-venue {
+  font-size: 14px;
+  color: color-mix(in srgb, var(--default-color), transparent 30%);
+}
+.paper h4 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 6px 0 8px;
+}
+.paper p {
+  margin-bottom: 6px;
+}
+
+/* Contact without the form */
+.contact .info-wrap {
+  padding: 30px;
+}
+.contact .info-item {
+  margin-bottom: 0;
+}
+.contact .info-item p a {
+  color: var(--default-color);
+  word-break: break-word;
+}
+
+/* Resume item links */
+.resume .resume-item a {
+  font-weight: 500;
+}
+
+/* ---------- Project and experience pages ---------- */
+
+.case-study {
+  font-size: 16px;
+  line-height: 1.7;
+}
+.case-study .lead-text {
+  font-size: 19px;
+  color: var(--heading-color);
+  margin-bottom: 28px;
+}
+.case-study h2 {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 40px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 88%);
+}
+.case-study img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 12px 0 4px;
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+}
+.case-study figure {
+  margin: 20px 0 28px;
+}
+.case-study figcaption {
+  font-size: 14px;
+  color: color-mix(in srgb, var(--default-color), transparent 35%);
+}
+.case-study table {
+  width: 100%;
+  margin: 16px 0 24px;
+  font-size: 15px;
+  border-collapse: collapse;
+}
+.case-study th,
+.case-study td {
+  padding: 8px 10px;
+  border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 88%);
+  text-align: left;
+}
+.case-study th {
+  color: var(--heading-color);
+}
+.case-study .table-wrap {
+  overflow-x: auto;
+}
+.case-study code {
+  background: color-mix(in srgb, var(--accent-color), transparent 92%);
+  color: var(--heading-color);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+.case-study pre {
+  background: #040b14;
+  color: #e6e8ea;
+  padding: 18px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+.case-study pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+
+/* Key numbers */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 16px;
+  margin: 20px 0 28px;
+}
+.metric {
+  background: var(--surface-color);
+  border-radius: 8px;
+  padding: 18px 20px;
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.07);
+}
+.metric .value {
+  display: block;
+  font-family: var(--heading-font);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent-color);
+  line-height: 1.2;
+}
+.metric .label {
+  font-size: 14px;
+  color: color-mix(in srgb, var(--default-color), transparent 25%);
+}
+
+/* Workflow steps (experience page) */
+.flow {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 8px;
+}
+.flow li.step {
+  background: color-mix(in srgb, var(--accent-color), transparent 90%);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 14px;
+  color: var(--heading-color);
+}
+.flow li.arrow {
+  align-self: center;
+  color: var(--accent-color);
+}
+
+/* Project information card */
+.portfolio-details .portfolio-info {
+  position: sticky;
+  top: 30px;
+}
+.portfolio-details .portfolio-info ul li {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 14px;
+}
+.portfolio-details .portfolio-info ul li strong {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--default-color), transparent 35%);
+  margin-bottom: 2px;
+}
+.portfolio-details .back-link {
+  display: inline-block;
+  margin-top: 36px;
+  font-weight: 500;
+}
+
+/* Portfolio cards: uniform thumbnails and an always-visible title */
+.portfolio .portfolio-content {
+  border-radius: 6px;
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.07);
+}
+.portfolio .portfolio-content img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: contain;
+  background: #fff;
+}
+.portfolio .portfolio-caption {
+  display: block;
+  margin-top: 12px;
+  font-family: var(--heading-font);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--heading-color);
+}
+.portfolio .portfolio-caption i {
+  color: var(--accent-color);
+  transition: 0.2s;
+}
+.portfolio .portfolio-caption:hover i {
+  margin-left: 4px;
+}
+
+/* Project information card is compact on small screens */
+@media (max-width: 991px) {
+  .portfolio-details .portfolio-info {
+    position: static;
+    padding: 20px;
+  }
+  .portfolio-details .portfolio-info h3 {
+    font-size: 18px;
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+  }
+  .portfolio-details .portfolio-info ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 16px;
+  }
+  .portfolio-details .portfolio-info ul li {
+    padding-bottom: 0;
+    font-size: 14px;
+  }
+}
