@@ -191,6 +191,31 @@
   color: var(--accent-color);
 }
 
+/* Buttons to a live app and its code (project pages) */
+.project-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 28px;
+}
+.project-actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 6px;
+  font-weight: 500;
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+}
+.project-actions a.primary {
+  background: var(--accent-color);
+  color: #fff;
+}
+.project-actions a:hover {
+  opacity: 0.88;
+}
+
 /* Project information card */
 .portfolio-details .portfolio-info {
   position: sticky;

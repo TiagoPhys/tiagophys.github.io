@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Business Performance Control Tower | Tiago Azevedo</title>
+  <meta name="description" content="A full-stack analytics app: a Python pipeline that validates the data and generates insights, a SQL API on Cloudflare Workers and D1, and a React dashboard.">
+
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <link href="../assets/css/main.css" rel="stylesheet">
+  <link href="../assets/css/custom.css" rel="stylesheet">
+</head>
+
+<body class="portfolio-details-page">
+
+  <header id="header" class="header dark-background d-flex flex-column">
+    <i class="header-toggle d-xl-none bi bi-list"></i>
+
+    <div class="profile-img">
+      <img src="../assets/img/profile.jpg" alt="Tiago Azevedo" class="img-fluid rounded-circle">
+    </div>
+
+    <a href="../index.html" class="logo d-flex align-items-center justify-content-center">
+      <h1 class="sitename">Tiago Azevedo</h1>
+    </a>
+
+    <div class="social-links text-center">
+      <a href="https://github.com/TiagoPhys" class="github" title="GitHub" target="_blank" rel="noopener"><i class="bi bi-github"></i></a>
+      <a href="https://www.linkedin.com/in/tnazevedo/" class="linkedin" title="LinkedIn" target="_blank" rel="noopener"><i class="bi bi-linkedin"></i></a>
+      <a href="mailto:tiago.phys@gmail.com" title="Email"><i class="bi bi-envelope"></i></a>
+    </div>
+
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href="../index.html#hero"><i class="bi bi-house navicon"></i> Home</a></li>
+        <li><a href="../index.html#about"><i class="bi bi-person navicon"></i> About</a></li>
+        <li><a href="../index.html#resume"><i class="bi bi-file-earmark-text navicon"></i> Resume</a></li>
+        <li><a href="../index.html#portfolio" class="active"><i class="bi bi-images navicon"></i> Portfolio</a></li>
+        <li><a href="../index.html#research"><i class="bi bi-journal-text navicon"></i> Research</a></li>
+        <li><a href="../index.html#contact"><i class="bi bi-envelope navicon"></i> Contact</a></li>
+      </ul>
+    </nav>
+
+  </header>
+
+  <main class="main">
+
+    <div class="page-title dark-background">
+      <div class="container d-lg-flex justify-content-between align-items-center">
+        <h1 class="mb-2 mb-lg-0">Business Performance Control Tower</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../index.html#portfolio">Portfolio</a></li>
+            <li class="current">Business Performance Control Tower</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <section id="portfolio-details" class="portfolio-details section">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row gy-4">
+
+          <div class="col-lg-8 order-2 order-lg-1">
+            <article class="case-study">
+<p class="lead-text">A retailer needs one place to see how sales, profit and operations are doing, where the money is lost, and what to act on. I built it end to end, from raw CSV to a live web app, with every number traceable to validated data.</p>
+<div class="project-actions">
+<a class="primary" href="https://business-performance-control-tower.pages.dev/" target="_blank" rel="noopener"><i class="bi bi-box-arrow-up-right"></i> Open the live app</a>
+<a href="https://github.com/TiagoPhys/business-performance-control-tower" target="_blank" rel="noopener"><i class="bi bi-github"></i> Code on GitHub</a>
+</div>
+<figure><a href="../assets/img/projects/business-performance-control-tower/overview.png" class="glightbox" data-gallery="control-tower"><img src="../assets/img/projects/business-performance-control-tower/overview.png" alt="Overview page for 2017: eight KPI cards compared with the previous period, monthly sales and monthly profit." loading="lazy"></a><figcaption>Overview for 2017. Each KPI is compared with the previous period of the same length and explains its formula.</figcaption></figure>
+
+<h2>The problem</h2>
+<p>The data is the public Sample Superstore dataset: 9,994 order lines, 5,009 orders and 793 customers from 2014 to 2017. A dashboard is only useful if people trust it, so the numbers had to be validated, consistent under any filter, and the insights reproducible and honest about what the data can and cannot show. It also had to run for free.</p>
+
+<h2>Approach</h2>
+<ol>
+<li><strong>Data preparation and quality.</strong> Python and pandas read the file as text, parse dates strictly and run 24 checks (duplicates, missing values, invalid dates, discount ranges, orphaned keys, inconsistent attributes). They found 449 postal codes that had lost a leading zero, 32 Product IDs reused for different products and one duplicated line. Customer names are dropped.</li>
+<li><strong>Relational model.</strong> The data is split into orders (one row per order), order lines (one row per line), products and customers, so orders are counted once and sales are summed at line level.</li>
+<li><strong>KPIs.</strong> DuckDB pre-computes every KPI for every filter combination. Each table is reconciled against totals computed independently with pandas. Distinct counts such as orders and customers are never summed across categories, because one order can contain several.</li>
+<li><strong>Deterministic insights.</strong> Fixed rules flag losing sub-categories, high-sales products that lose money, regional margins and the discount–margin pattern. Every insight carries its evidence and a caveat, and a test rejects causal wording.</li>
+<li><strong>API.</strong> A read-only TypeScript API on Cloudflare Workers queries a D1 (SQLite) database. Filters are checked against allowlists and bound as SQL parameters. Most requests read a few pre-computed rows; custom date ranges and ship-mode filters run indexed SQL, and tests check that both paths return the same numbers.</li>
+<li><strong>Dashboard.</strong> React and TypeScript with Tailwind CSS, shadcn/ui, Recharts and TanStack Table: global filters kept in the URL, server-side search and sorting, CSV export, an action plan, and loading, error and empty states. An automated accessibility check (axe) finds no violations.</li>
+</ol>
+
+<h2>Results</h2>
+<div class="metrics">
+<div class="metric"><span class="value">$2.30M</span><span class="label">sales at a 12.5% profit margin</span></div>
+<div class="metric"><span class="value">&minus;$17.7k</span><span class="label">loss on Tables, a &minus;8.6% margin</span></div>
+<div class="metric"><span class="value">&minus;37.3%</span><span class="label">margin on lines discounted above 20% (29.5% undiscounted)</span></div>
+<div class="metric"><span class="value">240</span><span class="label">automated tests across pipeline, API and app</span></div>
+</div>
+
+<figure><a href="../assets/img/projects/business-performance-control-tower/products.png" class="glightbox" data-gallery="control-tower"><img src="../assets/img/projects/business-performance-control-tower/products.png" alt="Profit by sub-category: Tables, Bookcases and Supplies lose money." loading="lazy"></a><figcaption>Profit by sub-category. Tables, Bookcases and Supplies lose money over the four years.</figcaption></figure>
+
+<ul>
+<li>Three sub-categories lose money overall: Tables (&minus;$17.7k), Bookcases (&minus;$3.5k) and Supplies (&minus;$1.2k). Tables made a loss in each of the four years.</li>
+<li>127 products in the top quartile of sales lose money, together &minus;$64.9k on $491k of sales.</li>
+<li>Central has the lowest margin, 7.9% against 12.5% overall: 21.8% of sales but 13.9% of profit. West brings 37.9% of profit from 31.6% of sales.</li>
+<li>Lines discounted above 20% have a combined margin of &minus;37.3%, against 29.5% for undiscounted lines, and the pattern holds in all three categories. This is an association, not a measured effect: a pricing test would be needed to estimate what changing discounts would do.</li>
+</ul>
+
+<figure><a href="../assets/img/projects/business-performance-control-tower/product-table.png" class="glightbox" data-gallery="control-tower"><img src="../assets/img/projects/business-performance-control-tower/product-table.png" alt="Product table sorted by profit, with sales, margin, quantity, average discount and orders." loading="lazy"></a><figcaption>Products sorted by profit. The biggest losses come from heavily discounted machines and tables.</figcaption></figure>
+
+<figure><a href="../assets/img/projects/business-performance-control-tower/operations.png" class="glightbox" data-gallery="control-tower"><img src="../assets/img/projects/business-performance-control-tower/operations.png" alt="Operations page: days from order to shipment by ship mode, by region and as a distribution." loading="lazy"></a><figcaption>Operations: days from order to shipment by ship mode and region. With no promised date in the data, the app shows time to ship and does not claim an on-time rate.</figcaption></figure>
+
+<figure><a href="../assets/img/projects/business-performance-control-tower/data-quality.png" class="glightbox" data-gallery="control-tower"><img src="../assets/img/projects/business-performance-control-tower/data-quality.png" alt="Methodology page: metric definitions and the results of the data quality checks." loading="lazy"></a><figcaption>Methodology and data quality: metric definitions and the result of every validation check.</figcaption></figure>
+
+<h2>Limitations</h2>
+<p>Sample Superstore is a teaching dataset with fictional customers, so the findings illustrate the method rather than a real business. The data has no promised or delivery dates, so delivery performance cannot be measured, and the insights describe patterns over the full period without claiming causes.</p>
+            </article>
+            <a class="back-link" href="../index.html#portfolio"><i class="bi bi-arrow-left"></i> Back to all projects</a>
+          </div>
+
+          <div class="col-lg-4 order-1 order-lg-2">
+            <div class="portfolio-info" data-aos="fade-up" data-aos-delay="200">
+              <h3>Project information</h3>
+              <ul>
+                <li><strong>Category</strong><span>Analytics, Dashboards, Data quality</span></li>
+                <li><strong>Data</strong><span>9,994 order lines, 5,009 orders, 2014&ndash;2017</span></li>
+                <li><strong>Stack</strong><span>Python, pandas, DuckDB, SQL, TypeScript, React, Cloudflare Workers, D1 and Pages</span></li>
+                <li><strong>Methods</strong><span>Data validation, reconciled KPIs, rule-based insights, automated testing</span></li>
+                <li><strong>Live app</strong><span><a href="https://business-performance-control-tower.pages.dev/" target="_blank" rel="noopener">business-performance-control-tower.pages.dev</a></span></li>
+                <li><strong>Code</strong><span><a href="https://github.com/TiagoPhys/business-performance-control-tower" target="_blank" rel="noopener">Repository on GitHub</a></span></li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="footer" class="footer position-relative light-background">
+    <div class="container">
+      <div class="copyright text-center">
+        <p>© <span>Copyright</span> <strong class="px-1 sitename">Tiago Azevedo</strong> <span>All Rights Reserved</span></p>
+      </div>
+      <div class="credits">
+        <!-- The free template licence requires keeping this credit link -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+  </footer>
+
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <div id="preloader"></div>
+
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/vendor/aos/aos.js"></script>
+  <script src="../assets/vendor/typed.js/typed.umd.js"></script>
+  <script src="../assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="../assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../assets/js/main.js"></script>
+
+</body>
+
+</html>
